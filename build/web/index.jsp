@@ -15,22 +15,53 @@
        
         <%
             Integer testCounter;
-            if(session.getAttribute("testCounter") == null){
-                testCounter = 0;
-            }else{
-                testCounter = (Integer)session.getAttribute("testCounter");
+            Boolean hasChanged = (Boolean)session.getAttribute("hasChanged");
+            System.out.println("======-------hasChanged = " + hasChanged);
+            if(hasChanged == null){
+                hasChanged = true;
             }
+            System.out.println("======-------hasChanged = " + hasChanged);
+            
+            String previousFinfSAX = (String)session.getAttribute("previousFindSAX");
+            if(previousFinfSAX == null){
+                previousFinfSAX = "";
+            }
+            
+            testCounter = (Integer)session.getAttribute("testCounter");
+            if(testCounter == null){
+                testCounter = 0;
+            }
+            
             session.setAttribute("testCounter", testCounter);
+            session.setAttribute("hasChanged", hasChanged);
+            session.setAttribute("previousFindSAX", previousFinfSAX);
         %>
         
         <%= "<h1>testCounter = " + testCounter + "</h1>"%>
+        
+        <%
+            String fs = (String)request.getAttribute("fs");
+            List<User> list = (List<User>)request.getAttribute("list");
+        %>
         
         <div class="container">
             <div class="box-2">
                 <form action="CheckSAX">
                     <p1>
                         Введите поле для поиска с помощью SAX:
-                        <input type="text" name="findSAX" value="" class="b1"/>
+                        <%
+                        if(fs == null || "".equals(fs)){
+                            %>
+                            <input type="text" name="findSAX" value="" class="b1"/>
+                            <%
+                        }else{
+                            %>
+                            <%= "<input type=\"text\" name=\"findSAX\" value=\"" + fs +  "\" class=\"b1\"/>"%>
+                            
+                            <%
+                        }
+                        %>
+                        
                         <input type="submit" value="Искать" name="SAXbutton" class="b1"/>
                     </p1>
                 </form>
@@ -47,28 +78,19 @@
         </div>
         
 
+
         <%
-            
-        String fs = (String)request.getAttribute("fs");
-        List<User> list = (List<User>)request.getAttribute("list");
-        
-//            if (testCounter != null) {
-//                //testCounter++;
-//            } else {
-//                testCounter = 0;
-//            }
+
         if (list != null && "role".equals(fs)) {
             %>
             <ul>
             <%
             for(int i = 0; i < list.size(); i++){
-                //request.setAttribute("counter", counter);
                 if(testCounter != 0 && i == testCounter){
                     testCounter = 0;
                     break;
                 }    
                 User user = list.get(i);
-                //Найдено значение "manager" поля "role" для пользователя "Иванов"
                 %>
                 <li>
                 <%= "Найдено значение " + user.getRole() + " поля \"" + fs + "\" для пользователя \"" + user.getFamily() + "\"" %>
@@ -77,7 +99,6 @@
             }
             %>
             </ul>
-            
             <%
             if(testCounter == - 1){%>
             
@@ -89,6 +110,40 @@
             <%
         }
         %>
+        
+        <%
+        if(list != null && "first-name".equals(fs)){
+
+            %>
+            <ul>
+            <%
+            for(int i = 0; i < list.size(); i++){
+                if(testCounter != 0 && i == testCounter){
+                    testCounter = 0;
+                    break;
+                } 
+                User user = list.get(i);
+                %>
+                <li>
+                    <%= "Найдено значение " + user.getFirstName() + " поля \"" + fs + "\" для пользователя \"" + user.getFamily() + "\"" %>
+                </li>
+                <%
+            }
+            %>
+            <ul>
+                
+            <%
+            if(testCounter == - 1){%>
+            
+                <%= "<p1>Больше значений поля \"first-name\" не найдено</p1>" %>
+                
+            <%}
+            %>  
+            
+            <%
+        }
+        %>
+        
 
 
     </body>
