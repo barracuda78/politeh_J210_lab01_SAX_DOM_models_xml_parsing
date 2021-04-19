@@ -81,6 +81,21 @@ public class CheckSAX extends HttpServlet {
                             System.out.println("case first-name сработал!!!");
                             request.setAttribute("fs", "first-name");
                             break;
+                        case "family":
+                            System.out.println("case family сработал!!!");
+                            request.setAttribute("fs", "family");
+                            break;
+                        case "department":
+                            System.out.println("case department сработал!!!");
+                            request.setAttribute("fs", "department");
+                            break;
+                        case "title":
+                            System.out.println("case title сработал!!!");
+                            request.setAttribute("fs", "title");
+                            break;
+                        default:
+                            System.out.println("case default сработал!!!");
+                            request.setAttribute("fs", "");
                     }
             }
             else{

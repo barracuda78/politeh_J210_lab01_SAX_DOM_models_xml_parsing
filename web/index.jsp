@@ -144,6 +144,84 @@
         }
         %>
         
+        <%
+        if(list != null && "family".equals(fs)){
+
+            %>
+            <ul>
+            <%
+            for(int i = 0; i < list.size(); i++){
+                if(testCounter != 0 && i == testCounter){
+                    testCounter = 0;
+                    break;
+                } 
+                User user = list.get(i);
+                %>
+                <li>
+                    <%= "Найдено значение " + user.getFamily() + " поля \"" + fs + "\" для пользователя \"" + user.getFirstName() + "\"" %>
+                </li>
+                <%
+            }
+            %>
+            <ul>
+                
+            <%
+            if(testCounter == - 1){%>
+            
+                <%= "<p1>Больше значений поля \"family\" не найдено</p1>" %>
+                
+            <%}
+            %>  
+            
+            <%
+        }
+        %>
+        
+        <%
+        if((list != null && "department".equals(fs)) || (list != null && "title".equals(fs))){
+
+            %>
+            <ul>
+            <%
+            for(int i = 0; i < list.size(); i++){
+                if(testCounter != 0 && i == testCounter){
+                    testCounter = 0;
+                    break;
+                } 
+                User user = list.get(i);
+                %>
+                <li>
+                    <%= "Найдено значение " + user.getDepartment() + " поля \"" + fs + "\" для пользователя \"" + user.getFamily() + "\"" %>
+                </li>
+                <%
+            }
+            %>
+            <ul>
+                
+            <%
+            if(testCounter == - 1){%>
+            
+                <%= "<p1>Больше значений поля \"department\" не найдено</p1>" %>
+                
+            <%}
+            %>  
+            
+            <%
+        }
+        %>
+        
+         <%
+        if(list != null && "".equals(fs)){ %>
+            <ul>
+            <%for(User u : list){ %>
+
+             <%= "<li>" + u.toString() %>"      
+             <%}%>
+             </ul>
+        <%
+        }%>
+
+      
 
 
     </body>
