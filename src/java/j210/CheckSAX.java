@@ -24,42 +24,79 @@ import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "CheckSAX", urlPatterns = {"/CheckSAX"})
 public class CheckSAX extends HttpServlet {
-    
-    private int counter;
-    
+        
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         
+        HttpSession session = request.getSession();
+        
         String saxButton = request.getParameter("SAXbutton");
         String findSAX = request.getParameter("findSAX");
-        Integer counter = (Integer)request.getAttribute("counter");
-        
-
-
-        List<User> list = DemoSAX.parseXMLBySAX();
-        //--------------------
-        HttpSession session = request.getSession();
+        String previousFindSAX = (String)session.getAttribute("previousFindSAX");
         Integer testCounter = (Integer)session.getAttribute("testCounter");
+        Boolean hasChanged = (Boolean)session.getAttribute("hasChanged");
+        
+        if("".equals(previousFindSAX)){
+            previousFindSAX = findSAX;
+        }
+        
+        if(!findSAX.equals(previousFindSAX)){
+            hasChanged = true;
+            previousFindSAX = findSAX;
+        }else{
+            hasChanged = false;
+        }
+        
+        session.setAttribute("previousFindSAX", previousFindSAX);
+        
+        List<User> list = DemoSAX.parseXMLBySAX();
+        
+        if(hasChanged){
+            testCounter = 0;
+            hasChanged = false;
+        }
+        
+        session.setAttribute("hasChanged", hasChanged);
+        
         if(testCounter >= 0){
             testCounter++;
         }
         if(testCounter > list.size()){
             testCounter = -1;
         }
+
         session.setAttribute("testCounter", testCounter);
-        //--------------------
-        
+
         if(saxButton != null){
             if(findSAX != null){
-                //findSAX это id, role, title, first-name, family, department;
-                switch(findSAX){
-                    case "role":
-                        //for()
-                        System.out.println("case role сработал!!!");
-                        request.setAttribute("fs", "role");
-                        request.setAttribute("counter", counter);
-                }
+                    //findSAX это id, role, title, first-name, family, department;
+                    switch(findSAX){
+                        case "role":
+                            //for()
+                            System.out.println("case role сработал!!!");
+                            request.setAttribute("fs", "role");
+                            break;
+                        case "first-name":
+                            System.out.println("case first-name сработал!!!");
+                            request.setAttribute("fs", "first-name");
+                            break;
+                        case "family":
+                            System.out.println("case family сработал!!!");
+                            request.setAttribute("fs", "family");
+                            break;
+                        case "department":
+                            System.out.println("case department сработал!!!");
+                            request.setAttribute("fs", "department");
+                            break;
+                        case "title":
+                            System.out.println("case title сработал!!!");
+                            request.setAttribute("fs", "title");
+                            break;
+                        default:
+                            System.out.println("case default сработал!!!");
+                            request.setAttribute("fs", "");
+                    }
             }
             else{
                 System.out.println("class CheckSAX: findSAX = null");
@@ -68,14 +105,11 @@ public class CheckSAX extends HttpServlet {
         else{
             System.out.println("class CheckSAX: saxButton = null");
         }
-        
-        
+
         request.setAttribute("list", list);
         request.getRequestDispatcher("index.jsp").forward(request, response);
         
-        
-        
-        
+
 //        try (PrintWriter out = response.getWriter()) {
 //            /* TODO output your page here. You may use following sample code. */
 //            out.println("<!DOCTYPE html>");
