@@ -60,6 +60,15 @@ body{
     padding:20px;
 }
 
+.box-3{
+    color:white;
+    background-color: #333333;
+    font-family: "Courier new", Courier, monospace;
+    line-height: 1.6em;
+    border:1px whitesmoke solid;
+    padding:20px;
+}
+
 .container{
     width:60%;
     margin:auto;
